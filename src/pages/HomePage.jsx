@@ -107,7 +107,6 @@ function HomePage() {
 
               <h3 className="text-lg font-semibold text-zinc-900">{card.title}</h3>
               <p className="mt-2 text-sm leading-7 text-zinc-600">{card.text}</p>
-              <Button className="mt-4" variant="primary">View More</Button>
             </article>
           ))}
         </div>
