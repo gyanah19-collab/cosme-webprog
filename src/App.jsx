@@ -5,6 +5,9 @@ import AboutPage from './pages/AboutPage'
 import ArticleListPage from './pages/ArticleListPage'
 import ArticlePage from './pages/ArticlePage'
 import NotFoundPage from './pages/NotFoundPage'
+import AuthLayout from './layouts/AuthLayout'
+import SignInPage from './layouts/SignInPage'
+import SignUpPage from './layouts/SignUpPage'
 
 const router = createBrowserRouter([
   {
@@ -16,6 +19,15 @@ const router = createBrowserRouter([
       { path: 'about', element: <AboutPage /> },
       { path: 'articles', element: <ArticleListPage /> },
       { path: 'articles/:name', element: <ArticlePage /> },
+    ],
+  },
+  {
+    path: '/auth',
+    element: <AuthLayout />,
+    errorElement: <NotFoundPage />,
+    children: [
+      { path: 'signin', element: <SignInPage /> },
+      { path: 'signup', element: <SignUpPage /> },
     ],
   },
   {

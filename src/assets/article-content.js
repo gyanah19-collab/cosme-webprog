@@ -11,7 +11,7 @@ const articles = [
     title: 'Music and My Identity',
     description: 'Music is one of the biggest parts of who I am. It shapes how I think, feel, and express myself creatively.',
     image: creativeImage,
-    url: 'https://youtube.com/',
+    url: 'https://www.youtube.com/@GIAHHH',
   },
   {
     name: 'soundcloud-creative-space',
@@ -25,7 +25,7 @@ const articles = [
     title: 'Spotify and My Mood',
     description: 'Spotify reflects my mood, personality, and creative energy through the music I listen to.',
     image: processImage,
-    url: 'https://open.spotify.com/',
+    url: 'https://open.spotify.com/user/216huz4h4ts47oc23kl3kcm5y?si=282d8893b2464072',
   },
   {
     name: 'movies-and-letterboxd',

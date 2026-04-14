@@ -2,25 +2,29 @@ import Button from '../components/Button'
 
 function NotFoundPage() {
   return (
-    <div className="mx-auto max-w-4xl px-6 py-20 text-center">
-      <div className="rounded-3xl border-2 border-zinc-200 bg-white p-10">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500">
-          Oops
-        </p>
+    <section className="min-h-screen bg-[radial-gradient(circle_at_top,#18181b_0%,#0f0f12_35%,#09090b_100%)] px-6 py-20 text-white">
+      <div className="mx-auto max-w-4xl">
+        <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-10 text-center shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/45">
+            Error
+          </p>
 
-        <h1 className="mt-2 text-4xl font-bold text-zinc-900">
-          Page Not Found
-        </h1>
+          <h1 className="mt-2 text-5xl font-bold text-white">
+            404
+          </h1>
 
-        <p className="mt-3 text-sm leading-7 text-zinc-600">
-          The page you tried to open does not exist or may have been moved somewhere else.
-        </p>
+          <p className="mt-4 text-base leading-7 text-white/65">
+            This page doesn’t exist.
+          </p>
 
-        <div className="mt-6 flex justify-center">
-          <Button to="/">Go Back Home</Button>
+          <div className="mt-6 flex justify-center">
+            <Button to="/" variant="primary">
+              Back Home
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 

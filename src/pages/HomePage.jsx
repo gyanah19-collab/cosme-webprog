@@ -32,21 +32,21 @@ function HomePage() {
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6">
-      <section className="grid gap-6 rounded-3xl border-2 border-zinc-200 bg-white p-6 lg:grid-cols-[1.1fr,0.9fr]">
+      <section className="grid gap-6 rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] lg:grid-cols-[1.1fr,0.9fr]">
         <div>
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500">
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-white/45">
             Gilianne Cosme
           </p>
 
-          <h1 className="text-4xl font-bold text-zinc-900">
+          <h1 className="text-4xl font-bold text-white">
             My Creative Space
           </h1>
 
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-600">
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-white/65">
             I’m someone who enjoys combining creativity with technology, especially when I can use it to build projects that feel personal and expressive. I’m very inclined toward music, and it often influences how I think, create, and design.
           </p>
 
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-zinc-600">
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-white/65">
             I’m interested in creativity, technology, self-expression, and building projects
             that feel both meaningful and visually engaging.
           </p>
@@ -57,17 +57,17 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="rounded-3xl border-2 border-zinc-200 bg-zinc-50 p-4">
+        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-4">
           <img
             src={profileImage}
             alt="Profile"
-            className="h-full min-h-[260px] w-full rounded-2xl object-cover"
+            className="h-full min-h-[260px] w-full rounded-[1.5rem] object-cover"
           />
         </div>
       </section>
 
-      <section className="rounded-3xl border-2 border-zinc-200 bg-white p-6">
-        <h2 className="mb-4 text-[13px] font-semibold uppercase tracking-[0.28em] text-zinc-500">
+      <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+        <h2 className="mb-4 text-[13px] font-semibold uppercase tracking-[0.28em] text-white/45">
           Quick Overview Blocks
         </h2>
 
@@ -75,12 +75,12 @@ function HomePage() {
           {overviewBlocks.map((block) => (
             <article
               key={block.title}
-              className="rounded-3xl border-2 border-zinc-200 p-4"
+              className="rounded-[1.75rem] border border-white/10 bg-white/5 p-4"
             >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-zinc-500">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/45">
                 {block.label}
               </p>
-              <h3 className="mt-2 text-2xl font-bold text-zinc-900">
+              <h3 className="mt-2 text-2xl font-bold text-white">
                 {block.title}
               </h3>
             </article>
@@ -88,8 +88,8 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="rounded-3xl border-2 border-zinc-200 bg-white p-6">
-        <h2 className="mb-4 text-[13px] font-semibold uppercase tracking-[0.28em] text-zinc-500">
+      <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+        <h2 className="mb-4 text-[13px] font-semibold uppercase tracking-[0.28em] text-white/45">
           My Interests and Personality
         </h2>
 
@@ -97,16 +97,16 @@ function HomePage() {
           {featureCards.map((card) => (
             <article
               key={card.title}
-              className="rounded-3xl border-2 border-zinc-200 p-4"
+              className="rounded-[1.75rem] border border-white/10 bg-white/5 p-4"
             >
               <img
                 src={card.image}
                 alt={card.title}
-                className="mb-4 h-48 w-full rounded-2xl object-cover"
+                className="mb-4 h-48 w-full rounded-[1.5rem] object-cover"
               />
 
-              <h3 className="text-lg font-semibold text-zinc-900">{card.title}</h3>
-              <p className="mt-2 text-sm leading-7 text-zinc-600">{card.text}</p>
+              <h3 className="text-lg font-semibold text-white">{card.title}</h3>
+              <p className="mt-2 text-sm leading-7 text-white/65">{card.text}</p>
             </article>
           ))}
         </div>

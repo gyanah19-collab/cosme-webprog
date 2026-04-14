@@ -24,22 +24,22 @@ function AboutPage() {
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6">
-      <section className="rounded-3xl border-2 border-zinc-200 bg-white p-6">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-zinc-500">
+      <section className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/45">
           About Me
         </p>
 
-        <h1 className="mt-2 text-4xl font-bold text-zinc-900">
+        <h1 className="mt-2 text-4xl font-bold text-white">
           Creativity, self-expression, and personal storytelling.
         </h1>
 
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-zinc-600">
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-white/65">
           When I was younger, I dreamed of becoming an artist, someone who could create things that inspire others. Whether it was through drawing, designing, or music, I was always drawn to anything that allowed me to express ideas and emotions in a creative way.
           I’ve always loved my creativity because it feels like a part of who I am, something I naturally turn to when I want to communicate or make something meaningful.
         </p>
 
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-zinc-600">
-          As I grew older, that passion didn’t fade—it evolved. I became more interested in combining creativity with technology, using it to build projects that are not only functional but also visually engaging and expressive. 
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-white/65">
+          As I grew older, that passion didn’t fade, it evolved. I became more interested in combining creativity with technology, using it to build projects that are not only functional but also visually engaging and expressive.
           Music, especially, continues to influence how I think and create, shaping my style and the way I approach my work. In everything I do, I aim to create something that resonates with people, even in the smallest way.
         </p>
 
@@ -52,16 +52,16 @@ function AboutPage() {
         {aboutCards.map((card) => (
           <article
             key={card.title}
-            className="rounded-3xl border-2 border-zinc-200 bg-white p-5"
+            className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
           >
             <img
               src={card.image}
               alt={card.title}
-              className="mb-4 h-48 w-full rounded-2xl object-cover"
+              className="mb-4 h-48 w-full rounded-[1.5rem] object-cover"
             />
 
-            <h2 className="text-lg font-semibold text-zinc-900">{card.title}</h2>
-            <p className="mt-2 text-sm leading-7 text-zinc-600">{card.text}</p>
+            <h2 className="text-lg font-semibold text-white">{card.title}</h2>
+            <p className="mt-2 text-sm leading-7 text-white/65">{card.text}</p>
           </article>
         ))}
       </section>
