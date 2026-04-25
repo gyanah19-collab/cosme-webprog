@@ -18,7 +18,7 @@ function NotFoundPage() {
           </p>
 
           <div className="mt-6 flex justify-center">
-            <Button to="/" variant="primary">
+            <Button to="/home" variant="primary">
               Back Home
             </Button>
           </div>
@@ -29,3 +29,4 @@ function NotFoundPage() {
 }
 
 export default NotFoundPage
+

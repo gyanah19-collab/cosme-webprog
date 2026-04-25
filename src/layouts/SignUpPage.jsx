@@ -1,88 +1,85 @@
 import { Link, useNavigate } from 'react-router-dom'
-import Button from '../components/Button'
+import { useState } from 'react'
 
-const inputClasses =
-  'mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/30 focus:bg-white/10 focus:shadow-[0_0_0_4px_rgba(255,255,255,0.06)]'
-
-const actionButtonClassName =
-  'w-full rounded-2xl py-3.5 text-[11px] tracking-[0.28em] bg-white text-black border-white hover:bg-zinc-200'
+const inputClass =
+  'w-full rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-white/30 focus:bg-white/[0.08]'
 
 function SignUpPage() {
   const navigate = useNavigate()
+  const [show, setShow] = useState(false)
 
-  const handleCreateAccount = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    navigate('/')
+    localStorage.setItem('loggedIn', 'true')
+    navigate('/home')
+    window.location.reload()
   }
 
   return (
-    <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-9">
-      <div className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-white/45">
-          Create Account
-        </p>
+    <div>
+      <p className="text-xs uppercase tracking-[0.35em] text-white/45">
+        Start Here
+      </p>
 
-        <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-          Sign Up
-        </h1>
+      <h1 className="mt-3 text-5xl font-serif">
+        Sign Up
+      </h1>
 
-        <p className="mt-4 max-w-md text-base leading-7 text-white/65">
-          Create an account and start building your creative journey.
-        </p>
-      </div>
+      <p className="mt-3 text-sm leading-7 text-white/60">
+        Create your account and begin your creative identity.
+      </p>
 
-      <form className="space-y-5" onSubmit={handleCreateAccount}>
+      <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+
         <div>
-          <label className="text-sm font-medium text-white/80">
-            Full Name
-          </label>
+          <label className="text-sm text-white/70">Full Name</label>
           <input
             type="text"
-            placeholder="Enter your name"
-            className={inputClasses}
+            placeholder="Enter your full name"
+            className={inputClass}
           />
         </div>
 
         <div>
-          <label className="text-sm font-medium text-white/80">
-            Email
-          </label>
+          <label className="text-sm text-white/70">Email</label>
           <input
             type="email"
             placeholder="Enter your email"
-            className={inputClasses}
+            className={inputClass}
           />
         </div>
 
         <div>
-          <label className="text-sm font-medium text-white/80">
-            Password
-          </label>
-          <input
-            type="password"
-            placeholder="Create a password"
-            className={inputClasses}
-          />
+          <label className="text-sm text-white/70">Password</label>
+
+          <div className="relative mt-2">
+            <input
+              type={show ? 'text' : 'password'}
+              placeholder="Create password"
+              className={inputClass}
+            />
+
+            <button
+              type="button"
+              onClick={() => setShow(!show)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-white/50 hover:text-white"
+            >
+              {show ? 'Hide' : 'Show'}
+            </button>
+          </div>
         </div>
 
-        <div className="pt-2">
-          <Button type="submit" variant="primary" className={actionButtonClassName}>
-            Create Account
-          </Button>
-        </div>
+        <button className="w-full rounded-2xl bg-white py-4 text-sm font-semibold text-black transition hover:scale-[1.02] hover:bg-zinc-200">
+          Create Account
+        </button>
       </form>
 
-      <div className="mt-8 border-t border-white/10 pt-6">
-        <p className="text-sm text-white/60">
-          Already have an account?{' '}
-          <Link
-            to="/auth/signin"
-            className="font-semibold text-white transition hover:text-white/70"
-          >
-            Log In
-          </Link>
-        </p>
-      </div>
+      <p className="mt-6 text-center text-sm text-white/60">
+        Already have account?{' '}
+        <Link to="/auth/signin" className="font-semibold text-white hover:text-white/80">
+          Log In
+        </Link>
+      </p>
     </div>
   )
 }

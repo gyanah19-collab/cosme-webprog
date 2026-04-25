@@ -1,77 +1,87 @@
 import { Link, useNavigate } from 'react-router-dom'
-import Button from '../components/Button'
+import { useState } from 'react'
 
-const inputClasses =
-  'mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/30 focus:border-white/30 focus:bg-white/10 focus:shadow-[0_0_0_4px_rgba(255,255,255,0.06)]'
-
-const actionButtonClassName =
-  'w-full rounded-2xl py-3.5 text-[11px] tracking-[0.28em] bg-white text-black border-white hover:bg-zinc-200'
+const inputClass =
+  'w-full rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-white/30 focus:bg-white/[0.08]'
 
 function SignInPage() {
   const navigate = useNavigate()
+  const [show, setShow] = useState(false)
 
-  const handleLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    navigate('/')
+    localStorage.setItem('loggedIn', 'true')
+    navigate('/home')
+    window.location.reload()
   }
 
   return (
-    <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-9">
-      <div className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-white/45">
-          Account Access
-        </p>
+    <div>
+      <p className="text-xs uppercase tracking-[0.35em] text-white/45">
+        Welcome Back
+      </p>
 
-        <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-          Log In
-        </h1>
+      <h1 className="mt-3 text-5xl font-serif">
+        Log In
+      </h1>
 
-        <p className="mt-4 max-w-md text-base leading-7 text-white/65">
-          Access your account and continue exploring your creative space.
-        </p>
-      </div>
+      <p className="mt-3 text-sm leading-7 text-white/60">
+        Continue your creative journey and access your space.
+      </p>
 
-      <form className="space-y-5" onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+
         <div>
-          <label className="text-sm font-medium text-white/80">
-            Email Address
-          </label>
+          <label className="text-sm text-white/70">Email</label>
           <input
             type="email"
             placeholder="Enter your email"
-            className={inputClasses}
+            className={inputClass}
           />
         </div>
 
         <div>
-          <label className="text-sm font-medium text-white/80">
-            Password
-          </label>
-          <input
-            type="password"
-            placeholder="Enter your password"
-            className={inputClasses}
-          />
+          <label className="text-sm text-white/70">Password</label>
+
+          <div className="relative mt-2">
+            <input
+              type={show ? 'text' : 'password'}
+              placeholder="Enter your password"
+              className={inputClass}
+            />
+
+            <button
+              type="button"
+              onClick={() => setShow(!show)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-white/50 hover:text-white"
+            >
+              {show ? 'Hide' : 'Show'}
+            </button>
+          </div>
         </div>
 
-        <div className="pt-2">
-          <Button type="submit" variant="primary" className={actionButtonClassName}>
-            Log In
-          </Button>
+        <div className="flex items-center justify-between text-sm text-white/60">
+          <label className="flex items-center gap-2">
+            <input type="checkbox" />
+            Remember me
+          </label>
+
+          <button type="button" className="hover:text-white">
+            Forgot?
+          </button>
         </div>
+
+        <button className="w-full rounded-2xl bg-white py-4 text-sm font-semibold text-black transition hover:scale-[1.02] hover:bg-zinc-200">
+          Log In
+        </button>
       </form>
 
-      <div className="mt-8 border-t border-white/10 pt-6">
-        <p className="text-sm text-white/60">
-          No account yet?{' '}
-          <Link
-            to="/auth/signup"
-            className="font-semibold text-white transition hover:text-white/70"
-          >
-            Sign Up
-          </Link>
-        </p>
-      </div>
+      <p className="mt-6 text-center text-sm text-white/60">
+        No account yet?{' '}
+        <Link to="/auth/signup" className="font-semibold text-white hover:text-white/80">
+          Sign Up
+        </Link>
+      </p>
     </div>
   )
 }
