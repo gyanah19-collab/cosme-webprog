@@ -8,8 +8,57 @@ function SignUpPage() {
   const navigate = useNavigate()
   const [show, setShow] = useState(false)
 
+  // NEW STATE
+  const [form, setForm] = useState({
+    fullName: '',
+    email: '',
+    username: '',
+    password: '',
+    age: '',
+    contact: ''
+  })
+
+  const [errors, setErrors] = useState({})
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const validate = () => {
+    const newErrors = {}
+
+    if (form.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters'
+    }
+
+    if (!/^\d{11}$/.test(form.contact)) {
+      newErrors.contact = 'Contact must be exactly 11 digits'
+    }
+
+    if (!/^\d+$/.test(form.age)) {
+      newErrors.age = 'Age must be a number only'
+    }
+
+    if (/\s/.test(form.username)) {
+      newErrors.username = 'Username must not contain spaces'
+    }
+
+    return newErrors
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    const validationErrors = validate()
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
+      return
+    }
+
     localStorage.setItem('loggedIn', 'true')
     navigate('/home')
     window.location.reload()
@@ -34,19 +83,68 @@ function SignUpPage() {
         <div>
           <label className="text-sm text-white/70">Full Name</label>
           <input
+            name="fullName"
             type="text"
             placeholder="Enter your full name"
             className={inputClass}
+            onChange={handleChange}
           />
         </div>
 
         <div>
           <label className="text-sm text-white/70">Email</label>
           <input
+            name="email"
             type="email"
             placeholder="Enter your email"
             className={inputClass}
+            onChange={handleChange}
           />
+        </div>
+
+        {/* NEW FIELD */}
+        <div>
+          <label className="text-sm text-white/70">Username</label>
+          <input
+            name="username"
+            type="text"
+            placeholder="Enter username"
+            className={inputClass}
+            onChange={handleChange}
+          />
+          {errors.username && (
+            <p className="text-red-400 text-xs mt-1">{errors.username}</p>
+          )}
+        </div>
+
+        {/* NEW FIELD */}
+        <div>
+          <label className="text-sm text-white/70">Age</label>
+          <input
+            name="age"
+            type="text"
+            placeholder="Enter age"
+            className={inputClass}
+            onChange={handleChange}
+          />
+          {errors.age && (
+            <p className="text-red-400 text-xs mt-1">{errors.age}</p>
+          )}
+        </div>
+
+        {/* NEW FIELD */}
+        <div>
+          <label className="text-sm text-white/70">Contact Number</label>
+          <input
+            name="contact"
+            type="text"
+            placeholder="11-digit number"
+            className={inputClass}
+            onChange={handleChange}
+          />
+          {errors.contact && (
+            <p className="text-red-400 text-xs mt-1">{errors.contact}</p>
+          )}
         </div>
 
         <div>
@@ -54,9 +152,11 @@ function SignUpPage() {
 
           <div className="relative mt-2">
             <input
+              name="password"
               type={show ? 'text' : 'password'}
               placeholder="Create password"
               className={inputClass}
+              onChange={handleChange}
             />
 
             <button
@@ -67,6 +167,10 @@ function SignUpPage() {
               {show ? 'Hide' : 'Show'}
             </button>
           </div>
+
+          {errors.password && (
+            <p className="text-red-400 text-xs mt-1">{errors.password}</p>
+          )}
         </div>
 
         <button className="w-full rounded-2xl bg-white py-4 text-sm font-semibold text-black transition hover:scale-[1.02] hover:bg-zinc-200">

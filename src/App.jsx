@@ -1,12 +1,9 @@
-// src/App.jsx
-
 import {
   createBrowserRouter,
   RouterProvider,
   Navigate,
 } from 'react-router-dom'
 
-/* WEBSITE */
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
@@ -14,18 +11,15 @@ import ArticleListPage from './pages/ArticleListPage'
 import ArticlePage from './pages/ArticlePage'
 import NotFoundPage from './pages/NotFoundPage'
 
-/* AUTH */
 import AuthLayout from './layouts/AuthLayout'
 import SignInPage from './layouts/SignInPage'
 import SignUpPage from './layouts/SignUpPage'
 
-/* DASHBOARD */
 import DashLayout from './layouts/DashLayout'
 import DashboardPage from './pages/dashboard/DashboardPage'
 import ReportsPage from './pages/dashboard/ReportsPage'
 import UsersPage from './pages/dashboard/UsersPage'
 
-/* SIMPLE PROTECTION */
 function ProtectedRoute({ children }) {
   const loggedIn = localStorage.getItem('loggedIn')
 
@@ -37,13 +31,11 @@ function ProtectedRoute({ children }) {
 }
 
 const router = createBrowserRouter([
-  /* DEFAULT */
   {
     path: '/',
     element: <Navigate to="/auth/signin" replace />,
   },
 
-  /* AUTH */
   {
     path: '/auth',
     element: <AuthLayout />,
@@ -53,7 +45,6 @@ const router = createBrowserRouter([
     ],
   },
 
-  /* ORIGINAL WEBSITE / LANDING PAGE */
   {
     path: '/home',
     element: (
@@ -70,7 +61,6 @@ const router = createBrowserRouter([
     ],
   },
 
-  /* HYBRID DASHBOARD */
   {
     path: '/dashboard',
     element: (
@@ -85,7 +75,6 @@ const router = createBrowserRouter([
     ],
   },
 
-  /* 404 */
   {
     path: '*',
     element: <NotFoundPage />,

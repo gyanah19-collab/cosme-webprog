@@ -1,5 +1,3 @@
-// src/dashboard/DashLayout.jsx
-
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 

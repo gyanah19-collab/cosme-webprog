@@ -1,172 +1,309 @@
-// src/pages/dashboard/UsersPage.jsx
+import { useState } from "react"
+import {
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Box,
+  Typography,
+  Button,
+  Modal,
+  Chip,
+  Switch,
+} from "@mui/material"
 
-import { Box, Typography, Paper, Chip } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
-
-const rows = [
-  { id: 1, firstName: 'Gilianne', lastName: 'Cosme', age: 21, status: 'Active' },
-  { id: 2, firstName: 'Maria', lastName: 'Lopez', age: 22, status: 'Pending' },
-  { id: 3, firstName: 'John', lastName: 'Reyes', age: 20, status: 'Active' },
-  { id: 4, firstName: 'Angela', lastName: 'Tan', age: 24, status: 'Inactive' },
-  { id: 5, firstName: 'Marco', lastName: 'Dela Cruz', age: 23, status: 'Active' },
-]
-
-const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  { field: 'firstName', headerName: 'First Name', flex: 1 },
-  { field: 'lastName', headerName: 'Last Name', flex: 1 },
-  { field: 'age', headerName: 'Age', width: 110 },
-  {
-    field: 'status',
-    headerName: 'Status',
-    width: 160,
-    renderCell: (params) => {
-      const color =
-        params.value === 'Active'
-          ? 'success'
-          : params.value === 'Pending'
-          ? 'warning'
-          : 'default'
-
-      return <Chip label={params.value} color={color} size="small" />
-    },
-  },
+const initialUsers = [
+  { id: 1, firstName: "Gia", lastName: "Cosme", age: 21, email: "gia@email.com", username: "giahh", role: "admin", gender: "female", status: "active" },
+  { id: 2, firstName: "John", lastName: "Doe", age: 25, email: "john@email.com", username: "johnd", role: "user", gender: "male", status: "inactive" },
 ]
 
 function UsersPage() {
+  const [users, setUsers] = useState(initialUsers)
+
+  const [search, setSearch] = useState("")
+  const [role, setRole] = useState("")
+  const [gender, setGender] = useState("")
+  const [status, setStatus] = useState("")
+
+  const [open, setOpen] = useState(false)
+  const [editId, setEditId] = useState(null)
+
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    age: "",
+    email: "",
+    username: "",
+    role: "",
+    gender: "",
+    status: "active",
+  })
+
+  // FIXED FILTER VISIBILITY
+  const filtered = users.filter((u) => {
+    const match =
+      u.firstName.toLowerCase().includes(search.toLowerCase()) ||
+      u.lastName.toLowerCase().includes(search.toLowerCase()) ||
+      u.email.toLowerCase().includes(search.toLowerCase()) ||
+      u.username.toLowerCase().includes(search.toLowerCase())
+
+    return (
+      match &&
+      (role ? u.role === role : true) &&
+      (gender ? u.gender === gender : true) &&
+      (status ? u.status === status : true)
+    )
+  })
+
+  const handleSave = () => {
+    if (!form.firstName || !form.email) return
+
+    if (editId) {
+      setUsers(users.map(u => (u.id === editId ? { ...u, ...form } : u)))
+    } else {
+      setUsers([...users, { id: Date.now(), ...form }])
+    }
+
+    setOpen(false)
+    setEditId(null)
+    setForm({
+      firstName: "",
+      lastName: "",
+      age: "",
+      email: "",
+      username: "",
+      role: "",
+      gender: "",
+      status: "active",
+    })
+  }
+
+  const handleEdit = (u) => {
+    setForm(u)
+    setEditId(u.id)
+    setOpen(true)
+  }
+
+  const toggleStatus = (id) => {
+    setUsers(users.map(u =>
+      u.id === id
+        ? { ...u, status: u.status === "active" ? "inactive" : "active" }
+        : u
+    ))
+  }
+
   return (
-    <Box sx={{ color: '#fff' }}>
-      <Typography
+    <Box sx={{ p: 3, color: "white" }}>
+
+      {/* HEADER */}
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+        <Typography sx={{ fontSize: 32, fontWeight: 800 }}>
+          Users
+        </Typography>
+
+        <Button onClick={() => setOpen(true)} variant="contained">
+          Add User
+        </Button>
+      </Box>
+
+      {/* FILTERS (FIXED VISIBILITY + LOOK LIKE SORT BUTTONS) */}
+      <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
+
+        <TextField
+          placeholder="Search users..."
+          onChange={(e) => setSearch(e.target.value)}
+          sx={{ input: { color: "white" }, width: 220 }}
+        />
+
+        <FormControl sx={{ minWidth: 120 }}>
+          <InputLabel sx={{ color: "white" }}>Role</InputLabel>
+          <Select value={role} onChange={(e) => setRole(e.target.value)} sx={{ color: "white" }}>
+            <MenuItem value="">All</MenuItem>
+            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="user">User</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ minWidth: 120 }}>
+          <InputLabel sx={{ color: "white" }}>Gender</InputLabel>
+          <Select value={gender} onChange={(e) => setGender(e.target.value)} sx={{ color: "white" }}>
+            <MenuItem value="">All</MenuItem>
+            <MenuItem value="male">Male</MenuItem>
+            <MenuItem value="female">Female</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl sx={{ minWidth: 120 }}>
+          <InputLabel sx={{ color: "white" }}>Status</InputLabel>
+          <Select value={status} onChange={(e) => setStatus(e.target.value)} sx={{ color: "white" }}>
+            <MenuItem value="">All</MenuItem>
+            <MenuItem value="active">Active</MenuItem>
+            <MenuItem value="inactive">Inactive</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
+      {/* TABLE */}
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ color: "white" }}>Name</TableCell>
+            <TableCell sx={{ color: "white" }}>Email</TableCell>
+            <TableCell sx={{ color: "white" }}>Username</TableCell>
+            <TableCell sx={{ color: "white" }}>Role</TableCell>
+            <TableCell sx={{ color: "white" }}>Status</TableCell>
+            <TableCell sx={{ color: "white" }}>Actions</TableCell>
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
+          {filtered.map((u) => (
+            <TableRow key={u.id}>
+              <TableCell sx={{ color: "white" }}>{u.firstName} {u.lastName}</TableCell>
+              <TableCell sx={{ color: "white" }}>{u.email}</TableCell>
+              <TableCell sx={{ color: "white" }}>{u.username}</TableCell>
+              <TableCell sx={{ color: "white" }}>{u.role}</TableCell>
+
+              <TableCell>
+                <Chip
+                  label={u.status === "active" ? "Active" : "Inactive"}
+                  sx={{
+                    background: u.status === "active" ? "#16a34a" : "#dc2626",
+                    color: "white",
+                    fontWeight: 700,
+                  }}
+                />
+              </TableCell>
+
+              <TableCell>
+                <Box sx={{ display: "flex", gap: 1 }}>
+
+                  <Button size="small" onClick={() => handleEdit(u)}>
+                    Edit
+                  </Button>
+
+                  <Button
+                    size="small"
+                    onClick={() => toggleStatus(u.id)}
+                    color={u.status === "active" ? "error" : "success"}
+                  >
+                    {u.status === "active" ? "Disable" : "Activate"}
+                  </Button>
+
+                </Box>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <Modal open={open} onClose={() => setOpen(false)}>
+  <Box
+    sx={{
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      background: "#0d0d0d",
+      p: 4,
+      borderRadius: 4,
+      width: 440,
+      color: "white",
+      boxShadow: "0 0 40px rgba(0,0,0,0.7)",
+    }}
+  >
+
+    <Typography sx={{ mb: 3, fontWeight: 900, fontSize: 20 }}>
+      {editId ? "Edit User" : "Add User"}
+    </Typography>
+
+    {["firstName", "lastName", "age", "email", "username"].map((field) => (
+      <TextField
+        key={field}
+        fullWidth
+        label={field.toUpperCase()}
+        value={form[field]}
+        onChange={(e) =>
+          setForm({ ...form, [field]: e.target.value })
+        }
         sx={{
-          fontSize: '46px',
-          fontWeight: 800,
-          letterSpacing: '-0.04em',
-          mb: 1,
+          mb: 2,
+          input: { color: "white" },
+          label: { color: "rgba(255,255,255,0.7)" },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
+            "&:hover fieldset": { borderColor: "#fff" },
+          },
         }}
+      />
+    ))}
+
+    {/* ROLE */}
+    <FormControl fullWidth sx={{ mb: 2 }}>
+      <InputLabel sx={{ color: "rgba(255,255,255,0.7)" }}>Role</InputLabel>
+      <Select
+        value={form.role}
+        onChange={(e) => setForm({ ...form, role: e.target.value })}
+        sx={{ color: "white" }}
       >
-        Users
+        <MenuItem value="admin">Admin</MenuItem>
+        <MenuItem value="user">User</MenuItem>
+      </Select>
+    </FormControl>
+
+    {/* GENDER */}
+    <FormControl fullWidth sx={{ mb: 2 }}>
+      <InputLabel sx={{ color: "rgba(255,255,255,0.7)" }}>Gender</InputLabel>
+      <Select
+        value={form.gender}
+        onChange={(e) => setForm({ ...form, gender: e.target.value })}
+        sx={{ color: "white" }}
+      >
+        <MenuItem value="male">Male</MenuItem>
+        <MenuItem value="female">Female</MenuItem>
+      </Select>
+    </FormControl>
+
+    {/* STATUS TOGGLE */}
+    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+      <Typography sx={{ color: "rgba(255,255,255,0.8)" }}>
+        Status: {form.status}
       </Typography>
 
-      <Typography
-        sx={{
-          color: 'rgba(255,255,255,0.65)',
-          fontSize: '15px',
-          mb: 4,
-        }}
-      >
-        Manage members with a premium readable dark interface.
-      </Typography>
+      <Switch
+        checked={form.status === "active"}
+        onChange={() =>
+          setForm({
+            ...form,
+            status: form.status === "active" ? "inactive" : "active",
+          })
+        }
+      />
+    </Box>
 
-      <Paper
-        sx={{
-          p: 2,
-          borderRadius: '30px',
-          background: 'rgba(255,255,255,0.04)',
-          border: '1px solid rgba(255,255,255,0.08)',
-        }}
-      >
-        <Box sx={{ height: 650 }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSizeOptions={[5]}
-            disableRowSelectionOnClick
-            initialState={{
-              pagination: {
-                paginationModel: { pageSize: 5, page: 0 },
-              },
-            }}
-            sx={{
-              border: 0,
-              color: '#fff',
-              backgroundColor: '#080808',
+    <Button
+      fullWidth
+      variant="contained"
+      onClick={handleSave}
+      sx={{
+        background: "#fff",
+        color: "#000",
+        fontWeight: 800,
+        "&:hover": { background: "#e5e5e5" },
+      }}
+    >
+      {editId ? "Update User" : "Create User"}
+    </Button>
 
-              /* entire root */
-              '&.MuiDataGrid-root': {
-                backgroundColor: '#080808',
-              },
+  </Box>
+</Modal>
 
-              '& .MuiDataGrid-main': {
-                backgroundColor: '#080808',
-              },
-
-              '& .MuiDataGrid-virtualScroller': {
-                backgroundColor: '#080808',
-              },
-
-              /* TOP HEADER ROW FIX */
-              '& .MuiDataGrid-columnHeaders': {
-                background: '#111111 !important',
-                color: '#ffffff !important',
-                minHeight: '56px !important',
-                maxHeight: '56px !important',
-                borderBottom: '1px solid rgba(255,255,255,0.08)',
-              },
-
-              '& .MuiDataGrid-columnHeader': {
-                background: '#111111 !important',
-                color: '#ffffff !important',
-              },
-
-              '& .MuiDataGrid-columnHeaderTitle': {
-                color: '#ffffff !important',
-                fontWeight: 700,
-                fontSize: '14px',
-              },
-
-              '& .MuiDataGrid-iconSeparator': {
-                color: 'rgba(255,255,255,0.12)',
-              },
-
-              '& .MuiSvgIcon-root': {
-                color: '#ffffff',
-              },
-
-              /* rows */
-              '& .MuiDataGrid-row': {
-                backgroundColor: '#0d0d0d',
-              },
-
-              '& .MuiDataGrid-row:nth-of-type(even)': {
-                backgroundColor: '#141414',
-              },
-
-              '& .MuiDataGrid-row:hover': {
-                backgroundColor: '#1d1d1d',
-              },
-
-              '& .MuiDataGrid-cell': {
-                color: '#ffffff',
-                borderBottom: '1px solid rgba(255,255,255,0.04)',
-              },
-
-              /* footer */
-              '& .MuiDataGrid-footerContainer': {
-                backgroundColor: '#111111',
-                color: '#ffffff',
-                borderTop: '1px solid rgba(255,255,255,0.08)',
-              },
-
-              '& .MuiTablePagination-root': {
-                color: '#ffffff',
-              },
-
-              '& .MuiSelect-select': {
-                color: '#ffffff',
-              },
-
-              /* fillers */
-              '& .MuiDataGrid-filler': {
-                backgroundColor: '#080808',
-              },
-
-              '& .MuiDataGrid-scrollbarFiller': {
-                backgroundColor: '#080808',
-              },
-            }}
-          />
-        </Box>
-      </Paper>
     </Box>
   )
 }
