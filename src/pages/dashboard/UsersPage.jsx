@@ -1,4 +1,6 @@
-import { useState } from "react"
+import axios from "axios"
+import { useState, useEffect } from "react"
+import { Navigate } from "react-router-dom"
 import {
   TextField,
   Select,
@@ -18,13 +20,16 @@ import {
   Switch,
 } from "@mui/material"
 
-const initialUsers = [
-  { id: 1, firstName: "Gia", lastName: "Cosme", age: 21, email: "gia@email.com", username: "giahh", role: "admin", gender: "female", status: "active" },
-  { id: 2, firstName: "John", lastName: "Doe", age: 25, email: "john@email.com", username: "johnd", role: "user", gender: "male", status: "inactive" },
-]
-
 function UsersPage() {
-  const [users, setUsers] = useState(initialUsers)
+
+    const user = JSON.parse(
+    localStorage.getItem("user")
+  )
+
+  if (user?.role === "editor") {
+    return <Navigate to="/home" />
+  }
+  const [users, setUsers] = useState([])
 
   const [search, setSearch] = useState("")
   const [role, setRole] = useState("")
@@ -35,23 +40,37 @@ function UsersPage() {
   const [editId, setEditId] = useState(null)
 
   const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    age: "",
-    email: "",
-    username: "",
-    role: "",
-    gender: "",
-    status: "active",
-  })
+  firstName: "",
+  lastName: "",
+  age: "",
+  email: "",
+  username: "",
+  password: "",
+  contact: "",
+  role: "",
+  gender: "",
+  status: "active",
+})
 
-  // FIXED FILTER VISIBILITY
+const [errors, setErrors] = useState({})
+
   const filtered = users.filter((u) => {
     const match =
-      u.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      u.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase()) ||
-      u.username.toLowerCase().includes(search.toLowerCase())
+  (u.firstName || '')
+    .toLowerCase()
+    .includes(search.toLowerCase()) ||
+
+  (u.lastName || '')
+    .toLowerCase()
+    .includes(search.toLowerCase()) ||
+
+  (u.email || '')
+    .toLowerCase()
+    .includes(search.toLowerCase()) ||
+
+  (u.username || '')
+    .toLowerCase()
+    .includes(search.toLowerCase())
 
     return (
       match &&
@@ -61,42 +80,151 @@ function UsersPage() {
     )
   })
 
-  const handleSave = () => {
-    if (!form.firstName || !form.email) return
+  useEffect(() => {
+  fetchUsers()
+}, [])
 
-    if (editId) {
-      setUsers(users.map(u => (u.id === editId ? { ...u, ...form } : u)))
-    } else {
-      setUsers([...users, { id: Date.now(), ...form }])
-    }
+const fetchUsers = async () => {
+  try {
+    const res = await axios.get(
+      "http://localhost:5000/api/auth/users"
+    )
 
-    setOpen(false)
-    setEditId(null)
-    setForm({
-      firstName: "",
-      lastName: "",
-      age: "",
-      email: "",
-      username: "",
-      role: "",
-      gender: "",
-      status: "active",
-    })
+    setUsers(res.data)
+
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+  const validate = () => {
+  const newErrors = {}
+
+
+  if (!form.firstName.trim()) {
+    newErrors.firstName = "First name is required"
   }
 
+  if (!form.lastName.trim()) {
+    newErrors.lastName = "Last name is required"
+  }
+
+  if (!form.email.trim()) {
+    newErrors.email = "Email is required"
+  }
+
+  if (!form.username.trim()) {
+    newErrors.username = "Username is required"
+  }
+
+  if (/\s/.test(form.username)) {
+    newErrors.username = "Username must not contain spaces"
+  }
+
+  const ageNum = Number(form.age)
+
+    if (
+      !Number.isInteger(ageNum) ||
+      ageNum < 1 ||
+      ageNum > 120
+    ) {
+      newErrors.age =
+        "Enter valid age"
+    }
+
+  if (!/^\d{11}$/.test(form.contact)) {
+    newErrors.contact = "Contact number must be 11 digits"
+  }
+
+  if (
+  form.password &&
+  form.password.length < 8
+) {
+  newErrors.password =
+    "Password must be at least 8 characters"
+}
+  return newErrors
+}
+
+  const handleSave = async () => {
+  const validationErrors = validate()
+
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors)
+    return
+  }
+
+  if (editId) {
+    const payload = { ...form }
+
+    if (!payload.password) {
+      delete payload.password
+    }
+
+    await axios.put(
+      `http://localhost:5000/api/auth/users/${editId}`,
+      payload
+    )
+    fetchUsers()
+  } else {
+    await axios.post(
+  "http://localhost:5000/api/auth/signup",
+  form
+)
+
+fetchUsers()
+  }
+
+  setErrors({})
+
+  setOpen(false)
+  setEditId(null)
+
+  setForm({
+    firstName: "",
+    lastName: "",
+    age: "",
+    email: "",
+    username: "",
+    password: "",
+    contact: "",
+    role: "",
+    gender: "",
+    status: "active",
+  })
+}
+
   const handleEdit = (u) => {
-    setForm(u)
-    setEditId(u.id)
+    setForm({
+      firstName: u.firstName,
+      lastName: u.lastName,
+      age: u.age,
+      email: u.email,
+      username: u.username,
+      password: "",
+      contact: u.contact,
+      role: u.role,
+      gender: u.gender,
+      status: u.status,
+    })
+    setEditId(u._id)
     setOpen(true)
   }
 
-  const toggleStatus = (id) => {
-    setUsers(users.map(u =>
-      u.id === id
-        ? { ...u, status: u.status === "active" ? "inactive" : "active" }
-        : u
-    ))
+  const toggleStatus = async (id) => {
+
+  try {
+
+    await axios.patch(
+      `http://localhost:5000/api/auth/users/${id}/status`
+    )
+
+    fetchUsers()
+
+  } catch (err) {
+    console.log(err)
   }
+}
 
   return (
     <Box sx={{ p: 3, color: "white" }}>
@@ -126,7 +254,8 @@ function UsersPage() {
           <Select value={role} onChange={(e) => setRole(e.target.value)} sx={{ color: "white" }}>
             <MenuItem value="">All</MenuItem>
             <MenuItem value="admin">Admin</MenuItem>
-            <MenuItem value="user">User</MenuItem>
+            <MenuItem value="editor">Editor</MenuItem>
+            <MenuItem value="viewer">Viewer</MenuItem>
           </Select>
         </FormControl>
 
@@ -164,7 +293,7 @@ function UsersPage() {
 
         <TableBody>
           {filtered.map((u) => (
-            <TableRow key={u.id}>
+            <TableRow key={u._id}>
               <TableCell sx={{ color: "white" }}>{u.firstName} {u.lastName}</TableCell>
               <TableCell sx={{ color: "white" }}>{u.email}</TableCell>
               <TableCell sx={{ color: "white" }}>{u.username}</TableCell>
@@ -190,7 +319,7 @@ function UsersPage() {
 
                   <Button
                     size="small"
-                    onClick={() => toggleStatus(u.id)}
+                    onClick={() => toggleStatus(u._id)}
                     color={u.status === "active" ? "error" : "success"}
                   >
                     {u.status === "active" ? "Disable" : "Activate"}
@@ -223,25 +352,43 @@ function UsersPage() {
       {editId ? "Edit User" : "Add User"}
     </Typography>
 
-    {["firstName", "lastName", "age", "email", "username"].map((field) => (
+    {[
+      "firstName",
+      "lastName",
+      "age",
+      "email",
+      "username",
+      "contact",
+      "password",
+    ]
+.map((field) => (
       <TextField
-        key={field}
-        fullWidth
-        label={field.toUpperCase()}
-        value={form[field]}
-        onChange={(e) =>
-          setForm({ ...form, [field]: e.target.value })
-        }
-        sx={{
-          mb: 2,
-          input: { color: "white" },
-          label: { color: "rgba(255,255,255,0.7)" },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": { borderColor: "rgba(255,255,255,0.2)" },
-            "&:hover fieldset": { borderColor: "#fff" },
+      key={field}
+      fullWidth
+      label={field.toUpperCase()}
+      value={form[field]}
+      onChange={(e) =>
+        setForm({ ...form, [field]: e.target.value })
+      }
+      error={!!errors[field]}
+      helperText={errors[field]}
+      sx={{
+        mb: 2,
+        input: { color: "white" },
+        label: { color: "rgba(255,255,255,0.7)" },
+        "& .MuiFormHelperText-root": {
+          color: "#f87171",
+        },
+        "& .MuiOutlinedInput-root": {
+          "& fieldset": {
+            borderColor: "rgba(255,255,255,0.2)",
           },
-        }}
-      />
+          "&:hover fieldset": {
+            borderColor: "#fff",
+          },
+        },
+      }}
+    />
     ))}
 
     {/* ROLE */}
@@ -253,7 +400,8 @@ function UsersPage() {
         sx={{ color: "white" }}
       >
         <MenuItem value="admin">Admin</MenuItem>
-        <MenuItem value="user">User</MenuItem>
+        <MenuItem value="editor">Editor</MenuItem>
+        <MenuItem value="viewer">Viewer</MenuItem>
       </Select>
     </FormControl>
 

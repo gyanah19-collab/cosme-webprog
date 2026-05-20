@@ -21,9 +21,12 @@ import ReportsPage from './pages/dashboard/ReportsPage'
 import UsersPage from './pages/dashboard/UsersPage'
 
 function ProtectedRoute({ children }) {
-  const loggedIn = localStorage.getItem('loggedIn')
+ 
+ const token =
+  localStorage.getItem('token')
 
-  if (loggedIn !== 'true') {
+if (!token)
+  {
     return <Navigate to="/auth/signin" replace />
   }
 

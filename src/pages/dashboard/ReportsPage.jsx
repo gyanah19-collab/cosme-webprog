@@ -36,21 +36,18 @@ export default function ReportsPage() {
         color: black !important;
       }
 
-      /* ✅ FIX 1: FORCE SVG TEXT VISIBILITY (IMPORTANT) */
       svg text {
         fill: black !important;
         color: black !important;
         opacity: 1 !important;
       }
 
-      /* ✅ FIX 2: FORCE tspan (this is what legends often use) */
       svg text tspan {
         fill: black !important;
         color: black !important;
         opacity: 1 !important;
       }
 
-      /* ✅ FIX 3: FORCE MUI LEGEND ROOT */
       .MuiChartsLegend-root {
         color: black !important;
       }
