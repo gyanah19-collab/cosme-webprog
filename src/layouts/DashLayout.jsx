@@ -25,7 +25,12 @@ import HomeIcon from '@mui/icons-material/Home'
 
 const drawerWidth = 270
 
+
 function DashLayout() {
+
+  const user = JSON.parse(localStorage.getItem('user')
+  )
+
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -36,32 +41,45 @@ function DashLayout() {
   }
 
   const logout = () => {
-    localStorage.removeItem('loggedIn')
-    navigate('/auth/signin')
-  }
+  localStorage.removeItem('loggedIn')
+  localStorage.removeItem('token')
+  localStorage.removeItem('user')
+  navigate('/auth/signin')
+}
 
   const menuItems = [
-    {
-      label: 'Overview',
-      icon: <DashboardIcon />,
-      path: '/dashboard',
-    },
-    {
-      label: 'Reports',
-      icon: <AssessmentIcon />,
-      path: '/dashboard/reports',
-    },
-    {
-      label: 'Users',
-      icon: <GroupIcon />,
-      path: '/dashboard/users',
-    },
-    {
-      label: 'Back Home',
-      icon: <HomeIcon />,
-      path: '/home',
-    },
-  ]
+  {
+    label: 'Overview',
+    icon: <DashboardIcon />,
+    path: '/dashboard',
+  },
+  {
+    label: 'Reports',
+    icon: <AssessmentIcon />,
+    path: '/dashboard/reports',
+  },
+
+  ...(user?.role === 'admin'
+    ? [
+        {
+          label: 'Users',
+          icon: <GroupIcon />,
+          path: '/dashboard/users',
+        },
+      ]
+    : []),
+
+  {
+    label: 'Articles',
+    icon: <AssessmentIcon />,
+    path: '/dashboard/articles',
+  },
+  {
+    label: 'Back Home',
+    icon: <HomeIcon />,
+    path: '/home',
+  },
+]
 
   const drawerContent = (
     <Box

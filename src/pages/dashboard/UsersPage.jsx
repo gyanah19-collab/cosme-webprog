@@ -26,9 +26,10 @@ function UsersPage() {
     localStorage.getItem("user")
   )
 
-  if (user?.role === "editor") {
-    return <Navigate to="/home" />
-  }
+  if (user?.role !== "admin") {
+  return <Navigate to="/home" />
+}
+
   const [users, setUsers] = useState([])
 
   const [search, setSearch] = useState("")

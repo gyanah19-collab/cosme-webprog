@@ -17,6 +17,7 @@ import SignUpPage from './layouts/SignUpPage'
 
 import DashLayout from './layouts/DashLayout'
 import DashboardPage from './pages/dashboard/DashboardPage'
+import DashArticleListPage from './pages/dashboard/DashArticleListPage'
 import ReportsPage from './pages/dashboard/ReportsPage'
 import UsersPage from './pages/dashboard/UsersPage'
 
@@ -75,6 +76,7 @@ const router = createBrowserRouter([
       { index: true, element: <DashboardPage /> },
       { path: 'reports', element: <ReportsPage /> },
       { path: 'users', element: <UsersPage /> },
+      { path: 'articles', element: <DashArticleListPage /> },
     ],
   },
 

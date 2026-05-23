@@ -56,6 +56,12 @@ exports.login = async (req, res) => {
       })
     }
 
+    if (user.status === "inactive") {
+  return res.status(403).json({
+    message: "Your account is inactive. Please contact support.",
+  })
+}
+
     if (user.role === "viewer") {
       return res.status(403).json({
         message: "Viewers cannot login",
