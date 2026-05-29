@@ -1,21 +1,21 @@
 const User = require("../models/User")
 
-// GET USERS
+
 exports.getUsers = async () => {
   return await User.find()
 }
 
-// CREATE USER
+
 exports.createUser = async (data) => {
   return await User.create(data)
 }
 
-// FIND USER BY EMAIL
+
 exports.findUserByEmail = async (email) => {
   return await User.findOne({ email })
 }
 
-// UPDATE USER
+
 exports.updateUser = async (id, data) => {
   return await User.findByIdAndUpdate(
     id,
@@ -24,7 +24,7 @@ exports.updateUser = async (id, data) => {
   )
 }
 
-// TOGGLE STATUS
+
 exports.toggleUserStatus = async (id) => {
 
   const user = await User.findById(id)

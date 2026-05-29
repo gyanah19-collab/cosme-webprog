@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken")
 
 const UserService = require("../services/userService")
 
-// SIGNUP
+
 exports.signup = async (req, res) => {
 
   try {
@@ -40,7 +40,6 @@ exports.signup = async (req, res) => {
   }
 }
 
-// LOGIN
 exports.login = async (req, res) => {
 
   try {
@@ -104,7 +103,7 @@ exports.login = async (req, res) => {
   }
 }
 
-// GET USERS
+
 exports.getUsers = async (req, res) => {
 
   try {
@@ -122,7 +121,7 @@ exports.getUsers = async (req, res) => {
   }
 }
 
-// UPDATE USER
+
 exports.updateUser = async (req, res) => {
 
   try {
@@ -158,7 +157,7 @@ exports.updateUser = async (req, res) => {
   }
 }
 
-// TOGGLE STATUS
+
 exports.toggleStatus = async (req, res) => {
 
   try {
